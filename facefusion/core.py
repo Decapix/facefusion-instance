@@ -197,30 +197,31 @@ def apply_args(program : ArgumentParser) -> None:
 	facefusion.globals.ui_layouts = args.ui_layouts
 
 
-def run(program : ArgumentParser) -> None:
-	validate_args(program)
-	apply_args(program)
-	logger.init(facefusion.globals.log_level)
+def run(program: ArgumentParser) -> None:
+    validate_args(program)
+    apply_args(program)
+    logger.init(facefusion.globals.log_level)
 
-	if facefusion.globals.system_memory_limit > 0:
-		limit_system_memory(facefusion.globals.system_memory_limit)
-	if facefusion.globals.force_download:
-		force_download()
-		return
-	if not pre_check() or not content_analyser.pre_check() or not face_analyser.pre_check() or not face_masker.pre_check() or not voice_extractor.pre_check():
-		return
-	for frame_processor_module in get_frame_processors_modules(facefusion.globals.frame_processors):
-		if not frame_processor_module.pre_check():
-			return
-	if facefusion.globals.headless:
-		conditional_process()
-	else:
-		import facefusion.uis.core as ui
+    if facefusion.globals.system_memory_limit > 0:
+        limit_system_memory(facefusion.globals.system_memory_limit)
+    if facefusion.globals.force_download:
+        force_download()
+        return
+    if not pre_check() or not content_analyser.pre_check() or not face_analyser.pre_check() or not face_masker.pre_check() or not voice_extractor.pre_check():
+        return
+    for frame_processor_module in get_frame_processors_modules(facefusion.globals.frame_processors):
+        if not frame_processor_module.pre_check():
+            return
+    if facefusion.globals.headless:
+        conditional_process()
+    else:
+        import facefusion.uis.core as ui
+        for ui_layout in ui.get_ui_layouts_modules(facefusion.globals.ui_layouts):
+            if not ui_layout.pre_check():
+                return
+        ui.launch(server_name="0.0.0.0", share=True)
 
-		for ui_layout in ui.get_ui_layouts_modules(facefusion.globals.ui_layouts):
-			if not ui_layout.pre_check():
-				return
-		ui.launch(share=True)
+
 
 
 def destroy() -> None:

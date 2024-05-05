@@ -71,23 +71,22 @@ def register_ui_component(component_name : ComponentName, component: Component) 
 	UI_COMPONENTS[component_name] = component
 
 
-def launch() -> None:
-	ui_layouts_total = len(facefusion.globals.ui_layouts)
-	with gradio.Blocks(theme = get_theme(), css = get_css(), title = metadata.get('name') + ' ' + metadata.get('version'), server_name='0.0.0.0') as ui:
-		for ui_layout in facefusion.globals.ui_layouts:
-			ui_layout_module = load_ui_layout_module(ui_layout)
-			if ui_layout_module.pre_render():
-				if ui_layouts_total > 1:
-					with gradio.Tab(ui_layout):
-						ui_layout_module.render()
-						ui_layout_module.listen()
-				else:
-					ui_layout_module.render()
-					ui_layout_module.listen()
+def launch(server_name="0.0.0.0", share=False) -> None:
+    with gradio.Blocks(theme=get_theme(), css=get_css(), title=metadata.get('name') + ' ' + metadata.get('version')) as ui:
+        for ui_layout in facefusion.globals.ui_layouts:
+            ui_layout_module = load_ui_layout_module(ui_layout)
+            if ui_layout_module.pre_render():
+                if len(facefusion.globals.ui_layouts) > 1:
+                    with gradio.Tab(ui_layout):
+                        ui_layout_module.render()
+                        ui_layout_module.listen()
+                else:
+                    ui_layout_module.render()
+                    ui_layout_module.listen()
 
-	for ui_layout in facefusion.globals.ui_layouts:
-		ui_layout_module = load_ui_layout_module(ui_layout)
-		ui_layout_module.run(ui)
+        ui.launch(server_name=server_name, share=share)
+
+
 
 
 def get_theme() -> gradio.Theme:
