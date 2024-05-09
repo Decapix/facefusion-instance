@@ -1,0 +1,3 @@
+ia.la-barque-des-rapteux.ovh {
+	reverse_proxy fastapi:80
+}
