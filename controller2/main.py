@@ -15,7 +15,7 @@ from mangum import Mangum
 # rajouter une authentification serveur
 
 app = FastAPI()
-handler = Mangum(app)
+handler = Mangum(app=app)
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR_CONTROLLER =  Path(__file__).resolve().parent
