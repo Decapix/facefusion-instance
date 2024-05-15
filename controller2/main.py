@@ -74,3 +74,6 @@ async def receive_and_process(background_tasks: BackgroundTasks, image: UploadFi
     return {"message": "Files received, processing will begin shortly."}
 
 
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
