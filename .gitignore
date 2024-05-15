@@ -2,6 +2,7 @@
 .idea
 .vscode
 .env
+.editorconfig
 
 Caddyfile
 .dockerignore
