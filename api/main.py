@@ -17,11 +17,10 @@ from mangum import Mangum
 app = FastAPI()
 handler = Mangum(app=app)
 
-BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR_CONTROLLER =  Path(__file__).resolve().parent
 
 def process_video(image_path, video_path, output_path):
-    os.chdir(BASE_DIR)  # Change le répertoire de travail
+    os.chdir(BASE_DIR_CONTROLLER)  # Change le répertoire de travail
     command = [
         "python", "run.py", "--headless",
         "--source",  image_path,
