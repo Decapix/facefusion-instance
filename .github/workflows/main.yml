@@ -25,6 +25,10 @@ jobs:
           python-version: 3.9
           # optional: architecture: x64 x64 or x86. Defaults to x64 if not specified
 
+      # Step-1.5 Install ffmpeg
+      - name: Install ffmpeg
+        run: sudo apt-get install -y ffmpeg
+
       # Step-2 Install Python Virtual ENV
       - name: Install Python Virtual ENV
         run: pip3 install virtualenv
@@ -74,20 +78,20 @@ jobs:
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: eu-west-3
       - name: Download Lambda api.zip
         uses: actions/download-artifact@v2
         with:
           name: api
       - name: Upload to S3
-        run: aws s3 cp api.zip s3://fastapi123718237193712983/api.zip
+        run: aws s3 cp api.zip s3://barque-ia-lambda/api.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: eu-west-3
       - name: Deploy new Lambda
-        run: aws lambda update-function-code --function-name fastapi --s3-bucket fastapi123718237193712983 --s3-key api.zip
+        run: aws lambda update-function-code --function-name barque2 --s3-bucket barque-ia-lambda --s3-key api.zip
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
+          AWS_DEFAULT_REGION: eu-west-3
