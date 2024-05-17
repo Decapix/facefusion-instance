@@ -10,12 +10,11 @@ from fastapi.responses import FileResponse
 import requests
 from pathlib import Path
 from fastapi import FastAPI, File, UploadFile, BackgroundTasks
-from mangum import Mangum
 
-# rajouter une authentification serveur
 
+# on a besoin de ffmpeg
 app = FastAPI()
-handler = Mangum(app=app)
+
 
 BASE_DIR_CONTROLLER =  Path(__file__).resolve().parent
 
@@ -66,7 +65,6 @@ async def receive_and_process(background_tasks: BackgroundTasks, image: UploadFi
         shutil.copyfileobj(image.file, image_file)
     with open(video_path, "wb") as video_file:
         shutil.copyfileobj(video.file, video_file)
-
     background_tasks.add_task(process_video, image_path, video_path, output_path)
     background_tasks.add_task(send_callback, output_path, video_path, image_path, callback_url)
 

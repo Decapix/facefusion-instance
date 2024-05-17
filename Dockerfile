@@ -1,14 +1,10 @@
-# Utilise une image de base officielle Python
-FROM python:3.11-slim
+FROM tiangolo/uvicorn-gunicorn-fastapi:python3.9
 
-# Définit le répertoire de travail
 WORKDIR /app
 
-# Copie les fichiers nécessaires dans le conteneur
-COPY requirement_facefusion_and_controller.txt requirement_facefusion_and_controller.txt
-RUN pip install --no-cache-dir -r requirement_facefusion_and_controller.txt
-
+COPY requirements.txt .
+RUN apt-get update && apt-get install -y ffmpeg && apt-get install -y git && pip install --upgrade pip &&pip install -r requirements.txt
 COPY . .
 
-# Commande pour lancer l'application
-CMD ["uvicorn", "controller2.main:app", "--host", "0.0.0.0", "--port", "80"]
+CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "80"]
+
